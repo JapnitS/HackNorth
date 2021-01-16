@@ -1,39 +1,68 @@
-const express = require('express')
-const request = require('request');
-const app = express()
-const port = 3000
-var tag = "italyscenes"
-var end_cursor = ''
+const util = require('util');
+const fs = require('fs');
+const exec = util.promisify(require('child_process').exec);
+const express = require('express');
+const app = express();
+const port = 8000
+
+//try this
+//const scrape = require('./scrape');
+
+//remove previous dataset files(so they don't override new window)
+/*
+async function remove() {
+    const { stdout, stderr } = await exec('rm -r apify_storage/datasets/tumblr-dataset/');
+    console.log('stdout:', stdout);
+    console.log('stderr:', stderr);
+  }
+remove()
+  .catch(err => {
+    console.log(err);
+  });
+*/
+
 app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
-
+    res.send("hello!")
+  })
 app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`)
+    console.log(`Example app listening at http://localhost:${port}`)
 })
-//         url:"https://instagram.com/graphql/query/?query_id=17888483320059182&id=<user_id>&first=12&after=<end_cursor>",
-//         //url: "https://www.instagram.com/explore/tags/"+tag+"/?__a=1&max_id="+end_cursor+"",
+app.post('/search', (req, res) => {
+    //performs label detection
+    //JSON write
+    var data= {
+        keyword: req.query, 
+    }
+    let dataJSON = JSON.stringify(data);
+    fs.writeFileSync('apify_storage/key_value_stores/default/INPUT.json', dataJSON);
         
-//         method: 'GET',
-//         json: {},
-//         qs: {
-//           offset: 20
-//         }
+      
+    //preform webscraping
+    async function scrape() {
+        const { stdout, stderr } = await exec('apify run --purge');
+        console.log('stdout:', stdout);
+        console.log('stderr:', stderr);
+
+        //now, render next screen
+        index=index+1;//next dataset
+        //res.render(__dirname+"/views/results.html", {index:index}});
         
-//       };
-//       request(requestOptions, (err, response, body) => {
-//         if (err) {
-//           console.log(err);
-//         } else if (response.statusCode === 200) {
-//           console.log(body);
-//         } else {
-//           console.log(response.statusCode);
-//         }
-//       });
-      
-      
+        //read json
 
 
-// app.listen(port, () => {
-//   console.log(`Example app listening at http://localhost:${port}`)
-// })
+        //create array
+        formatted_data=[]
+        object= {
+            'Location': '',
+            'imglinks': '',
+        }
+        
+        //send
+        res.send(formatted_data)
+    }
+    scrape()
+    .catch(err => {
+        console.log(err);
+    });
+
+});
