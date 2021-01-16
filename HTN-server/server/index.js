@@ -29,6 +29,7 @@ app.listen(port, () => {
 })
 app.post('/search', (req, res) => {
     //performs label detection
+    console.log(req) //fix later
     //JSON write
     var data= {
         keyword: req.query, 
@@ -53,8 +54,8 @@ app.post('/search', (req, res) => {
         //create array
         formatted_data=[]
         object= {
-            'Location': '',
-            'imglinks': '',
+            'name': '',
+            'url': '',
         }
         
         //send
