@@ -11,6 +11,8 @@
   "license": "ISC",
   "dependencies": {
     "apify": "^0.22.4",
+    "apify-cli": "^0.6.1",
+    "cors": "^2.8.5",
     "express": "^4.17.1",
     "jquery": "^3.5.1",
     "jsdom": "^16.4.0"

@@ -3,23 +3,11 @@ const fs = require('fs');
 const exec = util.promisify(require('child_process').exec);
 const express = require('express');
 const app = express();
-const port = 8000
+var cors = require("cors");
+app.use(cors());
+const port = 8080
 
-//try this
-//const scrape = require('./scrape');
 
-//remove previous dataset files(so they don't override new window)
-/*
-async function remove() {
-    const { stdout, stderr } = await exec('rm -r apify_storage/datasets/tumblr-dataset/');
-    console.log('stdout:', stdout);
-    console.log('stderr:', stderr);
-  }
-remove()
-  .catch(err => {
-    console.log(err);
-  });
-*/
 
 app.get('/', (req, res) => {
     res.send("hello!")
@@ -30,6 +18,7 @@ app.listen(port, () => {
 app.post('/search', (req, res) => {
     //performs label detection
     console.log(req) //fix later
+    console.log(req.query)
     //JSON write
     var data= {
         keyword: req.query, 
@@ -54,7 +43,7 @@ app.post('/search', (req, res) => {
         //create array
         formatted_data=[]
         object= {
-            'name': '',
+            'location': '',
             'url': '',
         }
         
